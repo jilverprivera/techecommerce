@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .content {
+    height: calc(100vh - 128px);
+  }
+  .square {
+    aspect-ratio: 1/1;
+  }
+}
+
+.rgba {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+@layer base {
+  * {
+    font-family: 'Supreme-Regular';
+  }
+  @font-face {
+    font-family: 'Supreme-Light';
+    src: url('../public/fonts/Supreme-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-display: swap;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Supreme-Regular';
+    src: url('../public/fonts/Supreme-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-display: swap;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Supreme-Medium';
+    src: url('../public/fonts/Supreme-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-display: swap;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'Supreme-Bold';
+    src: url('../public/fonts/Supreme-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-display: swap;
+    font-style: normal;
+  }
+}
