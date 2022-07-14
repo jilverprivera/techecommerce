@@ -3,5 +3,4 @@ export interface CategoryInterface {
   name: string;
   createdAt: string;
   updatedAt: string;
-  __v: number;
 }

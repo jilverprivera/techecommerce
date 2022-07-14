@@ -12,7 +12,6 @@ export interface ProductInterface {
   stock: number;
   createdAt: string;
   updatedAt: string;
-  __v: number;
 }
 
 export interface Images {
