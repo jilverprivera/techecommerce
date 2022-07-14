@@ -39,12 +39,17 @@ const Header = () => {
           TechEcommerce
         </h1>
         <div className="flex items-center justify-center flex-row xs:hidden sm:hidden md:hidden  lg:block xl:block">
-          <Link href={'/cart'}>
-            <a className="mx-3 text-sm">Cart (0)</a>
-          </Link>
-          <Link href={'/wishlist'}>
-            <a className="mx-3 text-sm">Wish list (0)</a>
-          </Link>
+          {!isAdmin && (
+            <>
+              <Link href={'/cart'}>
+                <a className="mx-3 text-sm">Cart (0)</a>
+              </Link>
+              <Link href={'/wishlist'}>
+                <a className="mx-3 text-sm">Wish list (0)</a>
+              </Link>
+            </>
+          )}
+
           {!isLogged ? (
             <Link href={'/signin'}>
               <a className="mx-3 text-sm">Sign in</a>
