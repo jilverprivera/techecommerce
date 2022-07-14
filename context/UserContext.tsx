@@ -11,6 +11,7 @@ import {
   User,
   UserResponse,
   userProviderProps,
+  CartInterface,
 } from '../interfaces/userContext';
 
 export const UserContext = createContext({} as userContextProps);
@@ -21,13 +22,18 @@ export const UserProvider = ({children}: userProviderProps) => {
   const AUTH_URL = 'http://localhost:5000/auth';
   const URL = 'http://localhost:5000/api';
 
+  // User
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [isLogged, setIsLogged] = useState<boolean>(false);
   const [token, setToken] = useState<string>('');
   const [user, setUser] = useState<User | null>(null);
-  const [payments, setPayments] = useState<any[] | null>([]);
-  const [cart, setCart] = useState<any[] | null>([]);
+  const [userPayments, setUserPayments] = useState<any[]>([]);
+  const [cart, setCart] = useState<CartInterface[]>([]);
+
+  //Admin
+  const [users, setUsers] = useState<User[] | null>([]);
+  const [payments, setPayments] = useState([]);
 
   useEffect(() => {
     const authToken = localStorage.getItem('token');
@@ -58,7 +64,7 @@ export const UserProvider = ({children}: userProviderProps) => {
           .then((response): Promise<UserResponse> => response.json())
           .then(data => {
             setUser(data.user);
-            setPayments(data.payments);
+            setUserPayments(data.payments);
             setCart(data.user.cart);
             setIsAdmin(data.user.role === 1 ? true : false);
             setIsLogged(true);
@@ -70,41 +76,31 @@ export const UserProvider = ({children}: userProviderProps) => {
     }
   }, [token]);
 
-  const addToCart = async (product: ProductInterface) => {
-    if (!isLogged) {
-      console.log('Need to sign to add to cart');
-    }
-    const check = cart?.every(item => {
-      return item._id !== product._id;
-    });
-
-    if (check) {
-      setCart([...cart, {...product, quantity: 1}]);
+  useEffect(() => {
+    if (isAdmin) {
       const headers = {
         'Content-type': 'application/json; charset=UTF-8',
         Authorization: token,
       };
+      const getUsers = async () => {
+        await fetch(`${URL}/users`, {method: 'GET', headers: headers})
+          .then((response): Promise<User[]> => response.json())
+          .then(data => setUsers(data))
+          .catch(err => console.error(err));
+      };
 
-      await fetch(`${URL}/user/add_cart`, {
-        method: 'PATCH',
-        body: JSON.stringify({cart: [...cart, {...product, quantity: 1}]}),
-        headers: headers,
-      })
-        .then((response): Promise<any> => response.json())
-        .then(data => {
-          setUser(data.user);
-          setPayments(data.payments);
-          setCart(data.user.cart);
-          setIsAdmin(data.user.role === 1 ? true : false);
-          setIsLogged(true);
-          setIsLoading(false);
-        })
-        .catch(err => console.error(err));
-    } else {
-      console.log('This item has been added to a cart');
+      const getHistoryPayments = async () => {
+        await fetch(`${URL}/payments`, {method: 'GET', headers: headers})
+          .then(response => response.json())
+          .then(data => setPayments(data))
+          .catch(err => console.error(err));
+      };
+      getUsers();
+      getHistoryPayments();
     }
-  };
+  }, [isAdmin]);
 
+  // Authentication
   const signIn = async (values: SignInInterface) => {
     await fetch(`${AUTH_URL}/signin`, {
       method: 'POST',
@@ -140,11 +136,80 @@ export const UserProvider = ({children}: userProviderProps) => {
     localStorage.removeItem('token');
     setIsLogged(false);
     setUser(null);
-    setPayments(null);
-    setCart(null);
+    setUserPayments([]);
+    setCart([]);
     setIsAdmin(false);
     setIsLogged(false);
     setIsLoading(false);
+  };
+
+  // Cart
+  const addToCart = async (product: CartInterface) => {
+    if (!isLogged) {
+      console.log('Need to sign to add to cart');
+    }
+    const check = cart?.every(item => {
+      return item._id !== product._id;
+    });
+
+    if (check) {
+      setCart([...cart, {...product, quantity: 1}]);
+      const headers = {
+        'Content-type': 'application/json; charset=UTF-8',
+        Authorization: token,
+      };
+
+      await fetch(`${URL}/user/add_cart`, {
+        method: 'PATCH',
+        body: JSON.stringify({cart: [...cart, {...product, quantity: 1}]}),
+        headers: headers,
+      })
+        .then((response): Promise<CartInterface[]> => response.json())
+        .then(data => console.log(data))
+        .catch(err => console.error(err));
+    } else {
+      console.log('This item has been added to a cart');
+    }
+  };
+
+  const incrementQuantity = (id: string) => {
+    cart.forEach(el => {
+      if (el._id === id) {
+        el.quantity += 1;
+      }
+    });
+    setCart([...cart]);
+  };
+
+  const decrementQuantity = (id: string) => {
+    cart.forEach(el => {
+      if (el._id === id) {
+        el?.quantity === 1 ? (el.quantity = 1) : (el.quantity -= 1);
+      }
+    });
+    setCart([...cart]);
+  };
+
+  const removeProduct = async (id: string) => {
+    cart.forEach((el, i) => {
+      if (el._id === id) {
+        cart.splice(i, 1);
+      }
+    });
+    setCart([...cart]);
+
+    const headers = {
+      'Content-type': 'application/json; charset=UTF-8',
+      Authorization: token,
+    };
+    await fetch(`${URL}/user/add_cart`, {
+      method: 'PATCH',
+      body: JSON.stringify({cart: [...cart]}),
+      headers: headers,
+    })
+      .then((response): Promise<CartInterface[]> => response.json())
+      .then(data => console.log(data))
+      .catch(err => console.error(err));
   };
 
   return (
@@ -154,12 +219,17 @@ export const UserProvider = ({children}: userProviderProps) => {
         isAdmin,
         isLogged,
         user,
-        payments,
+        userPayments,
         cart,
+        users,
+        payments,
         signIn,
         signUp,
         signOut,
         addToCart,
+        incrementQuantity,
+        decrementQuantity,
+        removeProduct,
       }}>
       {children}
     </UserContext.Provider>
