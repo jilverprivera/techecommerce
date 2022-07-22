@@ -1,5 +1,5 @@
 import { GetServerSideProps } from 'next';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import Layout from 'components/layout';
 
@@ -9,13 +9,10 @@ import Products from 'components/Products';
 
 import { CategoryInterface } from 'interfaces/categories';
 import { ProductInterface } from 'interfaces/products';
+import { AppContext } from 'context/AppContext';
 
-interface HomeProps {
-  products: ProductInterface[];
-  categories: CategoryInterface[];
-}
-
-const Home = ({ products, categories }: HomeProps) => {
+const Home = () => {
+  const { products, categories } = useContext(AppContext);
   const [latest, setLatest] = useState<ProductInterface[]>([]);
   const [category, setCategory] = useState<CategoryInterface>({
     name: 'All',
