@@ -2,50 +2,99 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  .content {
-    height: calc(100vh - 128px);
-  }
-  .square {
-    aspect-ratio: 1/1;
-  }
-}
-
-.rgba {
-  background-color: rgba(255, 255, 255, 0.3);
-}
 @layer base {
   * {
-    font-family: 'Supreme-Regular';
+    font-family: 'ClashGrotesk-Regular';
   }
   @font-face {
-    font-family: 'Supreme-Light';
-    src: url('../public/fonts/Supreme-Light.ttf') format('truetype');
+    font-family: 'ClashGrotesk-Light';
+    src: url('../public/fonts/ClashGrotesk-Light.ttf') format('truetype');
     font-weight: 300;
     font-display: swap;
     font-style: normal;
   }
 
   @font-face {
-    font-family: 'Supreme-Regular';
-    src: url('../public/fonts/Supreme-Regular.ttf') format('truetype');
+    font-family: 'ClashGrotesk-Regular';
+    src: url('../public/fonts/ClashGrotesk-Regular.ttf') format('truetype');
     font-weight: 400;
     font-display: swap;
     font-style: normal;
   }
 
   @font-face {
-    font-family: 'Supreme-Medium';
-    src: url('../public/fonts/Supreme-Medium.ttf') format('truetype');
+    font-family: 'ClashGrotesk-Medium';
+    src: url('../public/fonts/ClashGrotesk-Medium.ttf') format('truetype');
     font-weight: 500;
     font-display: swap;
     font-style: normal;
   }
   @font-face {
-    font-family: 'Supreme-Bold';
-    src: url('../public/fonts/Supreme-Bold.ttf') format('truetype');
+    font-family: 'ClashGrotesk-Semibold';
+    src: url('../public/fonts/ClashGrotesk-Semibold.ttf') format('truetype');
+    font-weight: 600;
+    font-display: swap;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'ClashGrotesk-Bold';
+    src: url('../public/fonts/ClashGrotesk-Bold.ttf') format('truetype');
     font-weight: 700;
     font-display: swap;
     font-style: normal;
+  }
+}
+
+@layer utilities {
+  .content {
+    min-height: calc(100vh - 152px);
+  }
+  .white {
+    background-color: #ffffff;
+  }
+
+  .lds-ripple {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+  }
+  .lds-ripple div {
+    position: absolute;
+    opacity: 1;
+    animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+  }
+  .lds-ripple div:nth-child(2) {
+    animation-delay: -0.5s;
+  }
+  @keyframes lds-ripple {
+    0% {
+      top: 36px;
+      left: 36px;
+      width: 0;
+      height: 0;
+      opacity: 0;
+    }
+    4.9% {
+      top: 36px;
+      left: 36px;
+      width: 0;
+      height: 0;
+      opacity: 0;
+    }
+    5% {
+      top: 36px;
+      left: 36px;
+      width: 0;
+      height: 0;
+      opacity: 1;
+    }
+    100% {
+      top: 0px;
+      left: 0px;
+      width: 72px;
+      height: 72px;
+      opacity: 0;
+    }
   }
 }
