@@ -3,4 +3,10 @@ export interface CategoryInterface {
   name: string;
   createdAt: string;
   updatedAt: string;
+  image?: Image;
+}
+
+export interface Image {
+  public_id: string;
+  url: string;
 }

@@ -5,7 +5,7 @@ export interface ProductInterface {
   price: number;
   description: string;
   content: string;
-  images: Images;
+  image: Image;
   category: string;
   checked: boolean;
   sold: number;
@@ -14,7 +14,14 @@ export interface ProductInterface {
   updatedAt: string;
 }
 
-export interface Images {
+export interface Image {
   public_id: string;
   url: string;
+}
+
+export enum SelectorList {
+  LOW_HIGH = 'Price: Low / High',
+  HIGH_LOW = 'Price: High / Low',
+  LATEST = 'Latest',
+  MOST_SOLDS = 'Most solds',
 }
