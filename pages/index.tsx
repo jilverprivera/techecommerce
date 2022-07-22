@@ -1,4 +1,3 @@
-import { GetServerSideProps } from 'next';
 import { useContext, useEffect, useState } from 'react';
 
 import Layout from 'components/layout';
@@ -64,16 +63,3 @@ const Home = () => {
 };
 
 export default Home;
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  const productsReq = await fetch(`${process.env.API_URL}/products`);
-  const categoriesReq = await fetch(`${process.env.API_URL}/categories`);
-  const productsRes = await productsReq.json();
-  const categoriesRes = await categoriesReq.json();
-  return {
-    props: {
-      products: productsRes,
-      categories: categoriesRes,
-    },
-  };
-};
