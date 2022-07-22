@@ -1,53 +1,56 @@
-import {useEffect, useState} from 'react';
-import {useProducts} from '../hooks/useProducts';
-import {ProductInterface} from '../interfaces/products';
+import { useContext, useEffect, useState } from 'react';
+
+import { LayoutContext } from 'context/LayoutContext';
 
 import ProductCard from './ProductCard';
+import ProductView from './ProductView';
+import ProductList from './ProductList';
+
+import { CategoryInterface } from 'interfaces/categories';
+import { ProductInterface } from 'interfaces/products';
+
 interface Props {
-  selector: string;
+  products: ProductInterface[];
+  category: CategoryInterface;
 }
-const Products = ({selector}: Props) => {
-  console.log(selector);
-  const {products, productsLoading} = useProducts();
 
-  const [sortProducts, setSortProducts] = useState<
-    ProductInterface[] | undefined
-  >();
-
-  console.log(sortProducts);
+const Products = ({ products, category }: Props) => {
+  const { gridView } = useContext(LayoutContext);
+  const { isGrid } = gridView;
+  const [productsCategory, setProductsCategory] = useState<ProductInterface[] | undefined>([]);
 
   useEffect(() => {
-    if (selector === 'latest') {
-      let latest = products?.sort((a, b) =>
-        b.createdAt.localeCompare(a.createdAt),
-      );
-      setSortProducts(latest);
-    }
-    if (selector === 'most-solds') {
-      let newProducts = products?.sort((a, b) => b.sold - a.sold);
-      setSortProducts(newProducts);
-    }
-    if (selector === 'high-low') {
-      let newProducts = products?.sort((a, b) => a.price - b.price);
-      setSortProducts(newProducts);
-    }
-    if (selector === 'low-high') {
-      let newProducts = products?.sort((a, b) => b.price - a.price);
-      setSortProducts(newProducts);
-    }
-  }, [selector]);
+    const getProductsByCategory = () => {
+      if (category._id !== '1') {
+        const productsByCategory = products.filter((el) => el.category === category._id);
+        setProductsCategory(productsByCategory);
+      } else {
+        setProductsCategory(products);
+      }
+    };
+    getProductsByCategory();
+  }, [category, products]);
 
   return (
-    <div className="col-span-9 w-full">
-      {productsLoading ? (
-        <h1 className="text-center">Loading...</h1>
-      ) : (
-        <div className="w-full grid grid-cols-3 gap-4">
-          {products?.map(product => (
-            <ProductCard key={product._id} {...product} />
-          ))}
+    <div className="xs:col-span-1 sm:col-span-1 md:col-span-1 lg:col-span-9 xl:col-span-9 w-full content">
+      <div className="w-full">
+        <ProductView />
+        <div
+          className={`w-full ${
+            isGrid
+              ? 'grid xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5'
+              : 'flex flex-col items-end justify-start'
+          }`}
+        >
+          {productsCategory?.map((product) =>
+            isGrid ? (
+              <ProductCard key={product._id} {...product} />
+            ) : (
+              <ProductList key={product._id} {...product} />
+            )
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };

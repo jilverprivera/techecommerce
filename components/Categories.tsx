@@ -1,29 +1,49 @@
-import {useCategories} from '../hooks/useCategories';
-
-const Categories = () => {
-  const {categories, categoriesLoading} = useCategories();
-
+import { CategoryInterface } from 'interfaces/categories';
+interface Props {
+  category: CategoryInterface;
+  categories: CategoryInterface[];
+  setCategory: (arg: CategoryInterface) => void;
+}
+const Categories = ({ categories, category, setCategory }: Props) => {
   return (
-    <div className="col-span-3 mx-auto max-w-7xl w-full ">
-      {categoriesLoading ? (
-        <h1 className="text-center">Loading...</h1>
-      ) : (
-        <div className="w-full">
-          <span className="mb-5 text-xl font-supremeMedium block">
-            Categories
-          </span>
-          <button className="mb-5 block hover:cursor-default text-sm">
-            All
+    <div className="lg:col-span-3 xl:col-span-3 w-full">
+      <div className="w-full">
+        <span className="mb-5 text-xl font-textMedium block xs:text-center sm:text-center md:text-left lg:text-left xl:text-left">
+          Categories
+        </span>
+        <button
+          className={`w-full py-2 flex items-center justify-start border-t-2 border-b-2 border-transparent hover:cursor-default hover:border-zinc-100 text-base  ${
+            category._id === '1'
+              ? 'border-zinc-400 hover:border-zinc-400 font-textMedium '
+              : 'font-textRegular'
+          }
+            `}
+          onClick={() =>
+            setCategory({
+              name: 'All',
+              _id: '1',
+              createdAt: new Date().toLocaleDateString(),
+              updatedAt: new Date().toLocaleDateString(),
+            })
+          }
+        >
+          All
+        </button>
+        {categories?.map((item) => (
+          <button
+            key={item._id}
+            className={`w-full py-2 flex items-center justify-start border-t-2 border-b-2 border-transparent hover:cursor-default hover:border-zinc-100 text-base ${
+              category._id === item._id
+                ? 'border-zinc-400 hover:border-zinc-400 font-textMedium '
+                : 'font-textRegular'
+            }
+              `}
+            onClick={() => setCategory({ ...item })}
+          >
+            {item.name}
           </button>
-          {categories?.map(category => (
-            <button
-              key={category._id}
-              className="mb-5 block hover:cursor-default text-sm">
-              {category.name}
-            </button>
-          ))}
-        </div>
-      )}
+        ))}
+      </div>
     </div>
   );
 };
