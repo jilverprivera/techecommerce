@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useState } from 'react';
 
 export const useForm = (initialState = {}): any => {
   const [values, setValues] = useState(initialState);
@@ -7,12 +7,12 @@ export const useForm = (initialState = {}): any => {
     setValues(initialState);
   };
 
-  const handleChange = ({target}: any) => {
+  const handleChange = ({ target }: any) => {
     setValues({
       ...values,
       [target.name]: target.value,
     });
   };
 
-  return {values, reset, handleChange};
+  return { values, reset, handleChange };
 };
