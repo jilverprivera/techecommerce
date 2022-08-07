@@ -17,8 +17,8 @@ const SignIn = () => {
   const { setOpenSignInModal } = signInModal;
 
   const { values, handleChange } = useForm({
-    email: 'jilverrivera1@gmail.com',
-    password: '123456789',
+    email: '',
+    password: '',
   });
 
   const handleSignIn = async (e: any) => {

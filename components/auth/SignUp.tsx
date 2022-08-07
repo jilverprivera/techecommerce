@@ -65,20 +65,8 @@ const SignUp = () => {
             onSubmit={handleSignUp}
             className="max-w-lg w-full flex items-center justify-center flex-col p-4"
           >
-            <Input
-              label="Name"
-              name="name"
-              type="text"
-              value={values.name}
-              onChange={handleChange}
-            />
-            <Input
-              label="Email"
-              name="email"
-              type="email"
-              value={values.email}
-              onChange={handleChange}
-            />
+            <Input label="Name" name="name" type="text" value={values.name} onChange={handleChange} />
+            <Input label="Email" name="email" type="email" value={values.email} onChange={handleChange} />
             <Input
               label="Password"
               name="password"
