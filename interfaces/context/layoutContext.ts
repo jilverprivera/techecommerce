@@ -5,7 +5,7 @@ export type LayoutContextProps = {
   alert: boolean;
   alertMessage: string;
   alertType: AlertTypes | null;
-  activateAlert: (arg: string, type: AlertTypes) => void;
+  activateAlert: (type: AlertTypes, arg: string) => void;
 };
 
 interface Grid {
