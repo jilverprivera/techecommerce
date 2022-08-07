@@ -4,11 +4,20 @@ import { ProductInterface } from '../products';
 export type appContextProps = {
   signInModal: SignInModal;
   signUpModal: SignUpModal;
-  products: ProductInterface[];
-  categories: CategoryInterface[];
+  productsContent: Products;
+  categoriesContent: Categories;
   productSearch: string;
   setProductSearch: (arg: string) => void;
 };
+
+interface Products {
+  products: ProductInterface[];
+  productsLoading: boolean;
+}
+interface Categories {
+  categories: CategoryInterface[];
+  categoriesLoading: boolean;
+}
 
 interface SignInModal {
   openSignInModal: boolean;
