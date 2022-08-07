@@ -2,16 +2,18 @@ import { useContext, useEffect, useState } from 'react';
 
 import Layout from 'components/layout';
 
-import ProductCard from 'components/ProductCard';
+import VerticalProductCard from 'components/products/VerticalProductCard';
 import Categories from 'components/Categories';
-import Products from 'components/Products';
+import Products from 'components/products/Products';
+import Loader from 'components/Loader';
 
 import { CategoryInterface } from 'interfaces/categories';
 import { ProductInterface } from 'interfaces/products';
 import { AppContext } from 'context/AppContext';
 
 const Home = () => {
-  const { products, categories } = useContext(AppContext);
+  const { productsContent } = useContext(AppContext);
+  const { products, productsLoading } = productsContent;
   const [latest, setLatest] = useState<ProductInterface[]>([]);
   const [category, setCategory] = useState<CategoryInterface>({
     name: 'All',
@@ -29,23 +31,23 @@ const Home = () => {
 
   return (
     <Layout title="Home - TechEcommerce">
-      <section className="max-w-screen-2xl mx-auto xs:w11/12 sm:w-11/12 md:w-11/12 lg:w-11/12 xl:w-11/12  mb-10">
-        <h2 className="mb-6 relative pb-0.5 font-textMedium text-gray-900 text-2xl before:content-[''] before:absolute before:bottom-0 before:w-10 before:h-1 before:bg-gray-900 before:rounded-md ">
-          New Products
-        </h2>
-        <div className="grid grid-cols-4 gap-4">
-          {latest.map((product) => (
-            <ProductCard key={product._id} {...product} />
-          ))}
-        </div>
+      <section className="max-w-screen-xl mx-auto xs:w-11/12 sm:w-11/12 md:w-11/12 lg:w-11/12 xl:w-11/12  mb-10">
+        <h2 className=" font-semibold text-xl text-gray-900 mb-6">New Products</h2>
+        {productsLoading ? (
+          <Loader />
+        ) : (
+          <div className="grid xs:grid-cols-1 sm:grid-cols-2  md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-5 w-full">
+            {latest.map((product) => (
+              <VerticalProductCard key={product._id} {...product} />
+            ))}
+          </div>
+        )}
       </section>
 
-      <section className="max-w-screen-2xl mx-auto xs:w-11/12 sm:w-11/12 md:w-11/12 lg:w-11/12 xl:w-11/12">
+      <section className="max-w-screen-xl mx-auto xs:w-11/12 sm:w-11/12 md:w-11/12 lg:w-11/12 xl:w-11/12">
         <div className="flex flex-row items-center justify-between pb-5">
           <div>
-            <h2 className="relative pb-0.5 font-textMedium text-gray-900 text-2xl before:content-[''] before:absolute before:bottom-0 before:w-10 before:h-1 before:bg-gray-900 before:rounded-md ">
-              Shop
-            </h2>
+            <h2 className=" font-semibold text-xl text-gray-900 mb-6">Shop</h2>
             <h2 className="mt-3 text-sm">Products / {category.name}</h2>
           </div>
           <div>
@@ -54,8 +56,8 @@ const Home = () => {
           </div>
         </div>
         <div className="w-full grid xs:grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-12 xl:grid-cols-12 gap-5">
-          <Categories setCategory={setCategory} category={category} categories={categories} />
-          <Products category={category} products={products} />
+          <Categories setCategory={setCategory} category={category} />
+          <Products category={category} />
         </div>
       </section>
     </Layout>
