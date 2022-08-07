@@ -14,7 +14,7 @@ interface Props {
 }
 
 const Layout = ({ children, title }: Props) => {
-  const { signInModal, signUpModal, productSearch } = useContext(AppContext);
+  const { signInModal, signUpModal } = useContext(AppContext);
   const { alert, alertMessage, alertType } = useContext(LayoutContext);
   const { openSignInModal } = signInModal;
   const { openSignUpModal } = signUpModal;
@@ -28,10 +28,9 @@ const Layout = ({ children, title }: Props) => {
       </Head>
       <main className="relative w-full h-full">
         <div className="w-full content py-5">{children}</div>
-        {productSearch.length > 0 && <ProductSearch />}
         {openSignInModal && <SignIn />}
         {openSignUpModal && <SignUp />}
-        {alert}
+        {alert && <AlertNotification message={alertMessage} type={alertType} />}
       </main>
     </>
   );
