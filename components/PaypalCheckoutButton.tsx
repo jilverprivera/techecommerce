@@ -1,5 +1,8 @@
 import { PayPalButtons } from '@paypal/react-paypal-js';
+import { LayoutContext } from 'context/LayoutContext';
+import { AlertTypes } from 'interfaces/frontend/alerts';
 import { CartInterface } from 'interfaces/userContext';
+import { useContext } from 'react';
 
 interface Props {
   cart: CartInterface[];
@@ -7,6 +10,7 @@ interface Props {
 }
 
 const PaypalCheckoutButton = ({ cart, total }: Props) => {
+  const { activateAlert } = useContext(LayoutContext);
   return (
     <PayPalButtons
       style={{
@@ -34,12 +38,14 @@ const PaypalCheckoutButton = ({ cart, total }: Props) => {
         const order = await actions.order?.capture();
         console.log(data);
         console.log(order);
+        activateAlert(AlertTypes.SUCCESS, 'Your purchase has been approved succesfully.');
       }}
       onCancel={() => {
-        alert('Ordered canceled');
+        activateAlert(AlertTypes.ERROR, 'Your purchase has been cancel.');
       }}
       onError={(err) => {
         console.error(err);
+        activateAlert(AlertTypes.ERROR, 'Something went wrong with your purchase.');
       }}
     />
   );
