@@ -1,10 +1,10 @@
-import { methods } from 'interfaces/backend/methods';
-import { CategoryInterface } from 'interfaces/categories';
-import { ProductInterface } from 'interfaces/products';
 import { createContext, useEffect, useState } from 'react';
+import useSWR from 'swr';
 
 import { appContextProps } from 'interfaces/context/appContext';
 import { ContextProviderProps } from 'interfaces/context/contextProvider';
+import { CategoryInterface } from 'interfaces/categories';
+import { ProductInterface } from 'interfaces/products';
 
 export const AppContext = createContext({} as appContextProps);
 
@@ -15,38 +15,35 @@ export const AppProvider = ({ children }: ContextProviderProps) => {
   const [openSignInModal, setOpenSignInModal] = useState<boolean>(false);
   const [openSignUpModal, setOpenSignUpModal] = useState<boolean>(false);
 
+  const fetcherProducts = (args: string) => fetch(args).then((res): Promise<ProductInterface[]> => res.json());
+
+  const fetcherCategories = (args: string) => fetch(args).then((res): Promise<CategoryInterface[]> => res.json());
+
+  const { data: productsData, isValidating: productsLoading } = useSWR('/api/products', fetcherProducts);
+  const { data: categoriesData, isValidating: categoriesLoading } = useSWR('/api/categories', fetcherCategories);
+
   useEffect(() => {
-    const getProducts = async () => {
-      await fetch('/api/products', {
-        method: methods.GET,
-        headers: { 'Content-type': 'application/json; charset=UTF-8' },
-      })
-        .then((response): Promise<ProductInterface[]> => response.json())
-        .then((data) => setProducts(data))
-        .catch((err) => console.error(err));
-    };
+    if (productsData) {
+      const sortedProducts = productsData.sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      setProducts(sortedProducts);
+    }
+  }, [productsData]);
 
-    const getCategories = async () => {
-      await fetch('/api/categories', {
-        method: methods.GET,
-        headers: { 'Content-type': 'application/json; charset=UTF-8' },
-      })
-        .then((response): Promise<CategoryInterface[]> => response.json())
-        .then((data) => setCategories(data))
-        .catch((err) => console.error(err));
-    };
-
-    getProducts();
-    getCategories();
-  }, []);
+  useEffect(() => {
+    if (categoriesData) {
+      setCategories(categoriesData);
+    }
+  }, [categoriesData]);
 
   return (
     <AppContext.Provider
       value={{
         signInModal: { openSignInModal, setOpenSignInModal },
         signUpModal: { openSignUpModal, setOpenSignUpModal },
-        products,
-        categories,
+        productsContent: { products, productsLoading },
+        categoriesContent: { categories, categoriesLoading },
         productSearch,
         setProductSearch,
       }}

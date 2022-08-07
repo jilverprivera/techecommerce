@@ -18,13 +18,14 @@ import {
 import { AppContext } from './AppContext';
 import Cookies from 'js-cookie';
 import { methods } from 'interfaces/backend/methods';
+import { LayoutContext } from './LayoutContext';
+import { AlertTypes } from 'interfaces/frontend/alerts';
 
 export const UserContext = createContext({} as userContextProps);
 
 export const UserProvider = ({ children }: userProviderProps) => {
   const Router = useRouter();
 
-  // User
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [isLogged, setIsLogged] = useState<boolean>(false);
@@ -35,7 +36,7 @@ export const UserProvider = ({ children }: userProviderProps) => {
   const [cartTotal, setCartTotal] = useState<number>(0);
   const [wishList, setWishList] = useState<ProductInterface[]>([]);
 
-  //Admin
+  const { activateAlert } = useContext(LayoutContext);
 
   useEffect(() => {
     const authToken = Cookies.get('token');
@@ -148,6 +149,9 @@ export const UserProvider = ({ children }: userProviderProps) => {
           headers: { 'Content-type': 'application/json; charset=UTF-8' },
           body: JSON.stringify({ cart: [...cart, { ...product, quantity: 1 }] }),
         });
+        activateAlert(AlertTypes.SUCCESS, 'Product has been added succesfully.');
+      } else {
+        activateAlert(AlertTypes.ERROR, 'Error, this product is in your cart.');
       }
     }
   };
@@ -164,6 +168,9 @@ export const UserProvider = ({ children }: userProviderProps) => {
           headers: { 'Content-type': 'application/json; charset=UTF-8' },
           body: JSON.stringify({ wishlist: [...wishList, { ...product }] }),
         });
+        activateAlert(AlertTypes.SUCCESS, 'Product added to your wish list.');
+      } else {
+        activateAlert(AlertTypes.ERROR, 'Error, this product is in your wish list.');
       }
     }
   };
@@ -200,6 +207,7 @@ export const UserProvider = ({ children }: userProviderProps) => {
         'Content-type': 'application/json; charset=UTF-8',
       },
     });
+    activateAlert(AlertTypes.SUCCESS, 'Product removed succesfully.');
   };
 
   const removeProductFromWishList = async (id: string) => {
@@ -216,6 +224,7 @@ export const UserProvider = ({ children }: userProviderProps) => {
         'Content-type': 'application/json; charset=UTF-8',
       },
     });
+    activateAlert(AlertTypes.SUCCESS, 'Product removed succesfully.');
   };
 
   return (

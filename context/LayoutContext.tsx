@@ -12,7 +12,7 @@ export const LayoutProvider = ({ children }: ContextProviderProps) => {
   const [alertMessage, setAlertMessage] = useState<string>('');
   const [alertType, setAlertType] = useState<AlertTypes | null>(null);
 
-  const activateAlert = (message: string, type: AlertTypes) => {
+  const activateAlert = (type: AlertTypes, message: string) => {
     setAlert(true);
     setAlertMessage(message);
     type === AlertTypes.ERROR ? setAlertType(AlertTypes.ERROR) : setAlertType(AlertTypes.SUCCESS);
