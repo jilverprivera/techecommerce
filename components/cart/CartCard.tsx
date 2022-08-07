@@ -4,15 +4,7 @@ import { UserContext } from '../../context/UserContext';
 import { CartInterface } from '../../interfaces/userContext';
 import { GrClose } from 'react-icons/gr';
 
-const CartCard = ({
-  description,
-  image,
-  name,
-  _id,
-  product_id,
-  price,
-  quantity,
-}: CartInterface) => {
+const CartCard = ({ description, image, name, _id, product_id, price, quantity }: CartInterface) => {
   const { decrementQuantity, incrementQuantity, removeProductFromCart } = useContext(UserContext);
 
   const [totalProduct, setTotalProduct] = useState<number>(0);
