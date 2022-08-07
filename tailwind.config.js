@@ -8,11 +8,7 @@ module.exports = {
     screens: { xxs: '270px', xs: '350px', ...screens },
     extend: {
       fontFamily: {
-        textLight: ['ClashGrotesk-Light', ...fontFamily.sans],
-        textRegular: ['ClashGrotesk-Regular', ...fontFamily.sans],
-        textMedium: ['ClashGrotesk-Medium', ...fontFamily.sans],
-        textSemibold: ['ClashGrotesk-Semibold', ...fontFamily.sans],
-        textBold: ['ClashGrotesk-Bold', ...fontFamily.sans],
+        sans: ['Barlow', ...fontFamily.sans],
       },
     },
   },
