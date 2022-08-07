@@ -29,9 +29,7 @@ const ProductSearch = () => {
             </div>
             <div className="col-span-4 flex flex-col items-start justify-center">
               <h3 className="font-textMedium text-lg">{product.name}</h3>
-              <span className="text-sm tracking-wider text-gray-400">
-                Ref: {product.product_id}
-              </span>
+              <span className="text-sm tracking-wider text-gray-400">Ref: {product.product_id}</span>
               <span className="text-sm mt-2">Stock: {product.stock}</span>
             </div>
           </a>
