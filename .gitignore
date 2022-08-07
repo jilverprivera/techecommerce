@@ -3,6 +3,7 @@
 /.next/
 /out/
 /build
+.vscode
 .DS_Store
 *.pem
 .env
