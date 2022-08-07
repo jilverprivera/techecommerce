@@ -5,13 +5,12 @@ import { AppContext } from '../../context/AppContext';
 import { ProductInterface } from '../../interfaces/products';
 
 const ProductSearch = () => {
-  const { products, productSearch, setProductSearch } = useContext(AppContext);
+  const { productsContent, productSearch, setProductSearch } = useContext(AppContext);
+  const { products } = productsContent;
   const [newProducts, setNewProducts] = useState<ProductInterface[]>([]);
   useEffect(() => {
     if (products) {
-      let result = products.filter((el) =>
-        el.name.toLocaleLowerCase().includes(productSearch.toLocaleLowerCase())
-      );
+      let result = products.filter((el) => el.name.toLocaleLowerCase().includes(productSearch.toLocaleLowerCase()));
       setNewProducts(result);
     }
   }, [products, productSearch]);
