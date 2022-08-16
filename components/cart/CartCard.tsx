@@ -24,6 +24,7 @@ const CartCard = ({ description, image, name, _id, product_id, price, quantity }
             alt={product_id}
             width={680}
             height={680}
+            objectFit="contain"
           />
         </div>
         <div className="col-span-3 flex flex-col items-start justify-center ">
