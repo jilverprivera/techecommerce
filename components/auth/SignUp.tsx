@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { FiX } from 'react-icons/fi';
 
 import { AppContext } from '../../context/AppContext';
@@ -9,6 +9,7 @@ import { useForm } from '../../hooks/useForm';
 import Input from 'components/core/input';
 
 const SignUp = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { signUp } = useContext(UserContext);
   const { signUpModal, signInModal } = useContext(AppContext);
   const { setOpenSignUpModal } = signUpModal;
@@ -24,6 +25,11 @@ const SignUp = () => {
   const handleSignUp = (e: any) => {
     e.preventDefault();
     signUp(values);
+    if (isLoading) {
+      setOpenSignUpModal(true);
+    } else {
+      setOpenSignUpModal(false);
+    }
   };
 
   const handleChangeAuth = () => {
@@ -41,39 +47,20 @@ const SignUp = () => {
           <FiX />
         </button>
         <div>
-          <Image
-            objectFit="cover"
-            src={'/images/chip.svg'}
-            alt="SignIn"
-            quality={100}
-            width={864}
-            height={1280}
-          />
+          <Image objectFit="cover" src={'/images/chip.svg'} alt="SignIn" quality={100} width={864} height={1280} />
         </div>
         <div className="flex flex-col items-center justify-center bg-white">
           <h1 className="text-2xl font-supremeMedium">Create account</h1>
           <span className="text-sm font-supremeMedium my-2">
             Already registered?
-            <button
-              onClick={() => handleChangeAuth()}
-              className="ml-2 font-supremeMedium hover:underline text-sky-500"
-            >
+            <button onClick={() => handleChangeAuth()} className="ml-2 font-supremeMedium hover:underline text-sky-500">
               Sign In
             </button>
           </span>
-          <form
-            onSubmit={handleSignUp}
-            className="max-w-lg w-full flex items-center justify-center flex-col p-4"
-          >
+          <form onSubmit={handleSignUp} className="max-w-lg w-full flex items-center justify-center flex-col p-4">
             <Input label="Name" name="name" type="text" value={values.name} onChange={handleChange} />
             <Input label="Email" name="email" type="email" value={values.email} onChange={handleChange} />
-            <Input
-              label="Password"
-              name="password"
-              type="password"
-              value={values.password}
-              onChange={handleChange}
-            />
+            <Input label="Password" name="password" type="password" value={values.password} onChange={handleChange} />
             <Input
               label="Confirm your password"
               name="password2"

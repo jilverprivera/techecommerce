@@ -10,7 +10,7 @@ import { useForm } from 'hooks/useForm';
 import Input from 'components/core/input';
 
 const SignIn = () => {
-  const [isLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { signIn } = useContext(UserContext);
   const { signUpModal, signInModal } = useContext(AppContext);
   const { setOpenSignUpModal } = signUpModal;
@@ -23,7 +23,9 @@ const SignIn = () => {
 
   const handleSignIn = async (e: any) => {
     e.preventDefault();
+    setIsLoading(true);
     signIn(values);
+    setIsLoading(false);
     if (isLoading) {
       setOpenSignInModal(true);
     } else {
@@ -51,38 +53,19 @@ const SignIn = () => {
           <FiX />
         </button>
         <div>
-          <Image
-            objectFit="cover"
-            src={'/images/drone.png'}
-            alt="SignIn"
-            quality={100}
-            width={900}
-            height={1100}
-          />
+          <Image objectFit="cover" src={'/images/drone.png'} alt="SignIn" quality={100} width={900} height={1100} />
         </div>
         <div className="flex flex-col items-center justify-center bg-white">
           <h1 className="text-2xl font-supremeMedium">Sign In</h1>
           <span className="text-sm font-supremeMedium my-2">
             Don&apos;t have account yet?
-            <button
-              onClick={() => handleChangeAuth()}
-              className="ml-2 font-supremeMedium hover:underline text-sky-500"
-            >
+            <button onClick={() => handleChangeAuth()} className="ml-2 font-supremeMedium hover:underline text-sky-500">
               Sign Up
             </button>
           </span>
-          <form
-            onSubmit={handleSignIn}
-            className="max-w-lg w-full flex items-center justify-center flex-col p-4"
-          >
+          <form onSubmit={handleSignIn} className="max-w-lg w-full flex items-center justify-center flex-col p-4">
             <Input label="Email" name="email" type="email" value={values.email} onChange={handleChange} />
-            <Input
-              label="Password"
-              name="password"
-              type="password"
-              value={values.password}
-              onChange={handleChange}
-            />
+            <Input label="Password" name="password" type="password" value={values.password} onChange={handleChange} />
 
             <button className="py-2 rounded-lg mt-3 w-full bg-lime-300 font-supremeMedium text-base hover:bg-lime-400 duration-150">
               Sign In
